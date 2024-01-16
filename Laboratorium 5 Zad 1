@@ -1,0 +1,27 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            WypiszDlugoscNapisu(null);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"StackTrace z chwili zgłoszenia wyjątku:{Environment.NewLine}{ex.StackTrace}");
+            throw new Exception("Obsługiwany wyjątek z dodaną przyczyną.", ex);
+        }
+    }
+
+    static void WypiszDlugoscNapisu(string napis)
+    {
+        if (napis == null)
+        {
+            throw new ArgumentNullException(nameof(napis), "Podany napis nie może być null.");
+        }
+
+        Console.WriteLine($"Długość napisu: {napis.Length}");
+    }
+}
