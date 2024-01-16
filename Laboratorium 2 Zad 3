@@ -1,0 +1,34 @@
+using System;
+
+class SimpleDate
+{
+    private DateTime currentDate;
+
+    public SimpleDate()
+    {
+        currentDate = DateTime.Now;
+    }
+
+    public void MoveForwardOneWeek() => currentDate = currentDate.AddDays(7);
+
+    public void MoveBackwardOneWeek() => currentDate = currentDate.AddDays(-7);
+
+    public void DisplayDate() => Console.WriteLine($"Current Date: {currentDate:yyyy-MM-dd}");
+}
+
+class Program
+{
+    static void Main()
+    {
+        SimpleDate myDate = new SimpleDate();
+        myDate.DisplayDate();
+
+        myDate.MoveForwardOneWeek();
+        Console.WriteLine("After moving one week forward:");
+        myDate.DisplayDate();
+
+        myDate.MoveBackwardOneWeek();
+        Console.WriteLine("After moving one week backward:");
+        myDate.DisplayDate();
+    }
+}
