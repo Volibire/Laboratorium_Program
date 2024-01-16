@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+
+class Osoba
+{
+    public string Imie { get; set; }
+    public string Nazwisko { get; set; }
+    public string Pesel { get; set; }
+
+    public int Wiek
+    {
+        get
+        {
+            int rokUrodzenia = int.Parse(Pesel.Substring(0, 2));
+            int miesiacUrodzenia = int.Parse(Pesel.Substring(2, 2));
+            int dzienUrodzenia = int.Parse(Pesel.Substring(4, 2));
+
+            int rok = DateTime.Now.Year;
+            int miesiac = DateTime.Now.Month;
+            int dzien = DateTime.Now.Day;
+
+            int wiek = rok - (rokUrodzenia + 1900);
+
+            if ((miesiac > miesiacUrodzenia) || (miesiac == miesiacUrodzenia && dzien >= dzienUrodzenia))
+            {
+                return wiek;
+            }
+            else
+            {
+                return wiek - 1;
+            }
+        }
+    }
+
+    public char Plec => (int.Parse(Pesel.Substring(9, 1)) % 2 == 0) ? 'K' : 'M';
+
+    public virtual bool CanGoAloneToHome() => Wiek >= 12 || (Wiek >= 6 && Plec == 'K');
+
+    public string GetFullName() => $"{Imie} {Nazwisko}";
+
+    public virtual void GetEducationInfo() => Console.WriteLine("Podstawowa edukacja.");
+}
+
+class Uczen : Osoba
+{
+    public string Szkola { get; set; }
+    public bool MozeSamWracacDoDomu { get; set; }
+
+    public override bool CanGoAloneToHome() => base.CanGoAloneToHome() && MozeSamWracacDoDomu;
+}
+
+class Nauczyciel : Uczen
+{
+    public string TytulNaukowy { get; set; }
+    public List<Uczen> PodwladniUczniowie { get; set; } = new List<Uczen>();
+
+    public void WhichStudentCanGoHomeAlone(DateTime dateToCheck)
+    {
+        Console.WriteLine($"Uczniowie, którzy mogą iść sami do domu {dateToCheck}:");
+        foreach (var uczen in PodwladniUczniowie)
+        {
+            if (uczen.CanGoAloneToHome())
+            {
+                Console.WriteLine($"{uczen.GetFullName()} ({uczen.Wiek} lat)");
+            }
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Nauczyciel nauczyciel = new Nauczyciel
+        {
+            Imie = "Jan",
+            Nazwisko = "Kowalski",
+            Pesel = "01234567890",
+            TytulNaukowy = "dr"
+        };
+
+        Uczen uczen1 = new Uczen
+        {
+            Imie = "Anna",
+            Nazwisko = "Nowak",
+            Pesel = "01234567891",
+            Szkola = "Szkoła Podstawowa nr 1",
+            MozeSamWracacDoDomu = true
+        };
+
+        Uczen uczen2 = new Uczen
+        {
+            Imie = "Piotr",
+            Nazwisko = "Zalewski",
+            Pesel = "01234567892",
+            Szkola = "Szkoła Podstawowa nr 1",
+            MozeSamWracacDoDomu = false
+        };
+
+        nauczyciel.PodwladniUczniowie.Add(uczen1);
+        nauczyciel.PodwladniUczniowie.Add(uczen2);
+
+        nauczyciel.WhichStudentCanGoHomeAlone(DateTime.Now);
+    }
+}
