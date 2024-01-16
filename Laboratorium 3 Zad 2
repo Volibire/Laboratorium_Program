@@ -1,0 +1,81 @@
+using System;
+
+class Samochod
+{
+    public string Marka { get; set; }
+    public string Model { get; set; }
+    public string Nadwozie { get; set; }
+    public string Kolor { get; set; }
+    public int RokProdukcji { get; set; }
+    private int Przebieg;
+
+    public int Przebieg
+    {
+        get { return Przebieg; }
+        set
+        {
+            Przebieg = value >= 0 ? value : 0;
+        }
+    }
+
+    public Samochod()
+    {
+        Console.WriteLine("Podaj dane samochodu:");
+        Console.Write("Marka: "); Marka = Console.ReadLine();
+        Console.Write("Model: "); Model = Console.ReadLine();
+        Console.Write("Nadwozie: "); Nadwozie = Console.ReadLine();
+        Console.Write("Kolor: "); Kolor = Console.ReadLine();
+        Console.Write("Rok produkcji: "); int.TryParse(Console.ReadLine(), out int rok); RokProdukcji = rok;
+        Console.Write("Przebieg: "); int.TryParse(Console.ReadLine(), out int przebieg); Przebieg = przebieg;
+    }
+
+    public Samochod(string marka, string model, string nadwozie, string kolor, int rokProdukcji, int przebieg)
+    {
+        Marka = marka;
+        Model = model;
+        Nadwozie = nadwozie;
+        Kolor = kolor;
+        RokProdukcji = rokProdukcji;
+        Przebieg = przebieg;
+    }
+
+    public virtual void WyswietlInformacje()
+    {
+        Console.WriteLine($"Samochód: {Marka} {Model}, Nadwozie: {Nadwozie}, Kolor: {Kolor}, Rok produkcji: {RokProdukcji}, Przebieg: {Przebieg} km");
+    }
+}
+
+class SamochodOsobowy : Samochod
+{
+    public double Waga { get; set; }
+    public double PojemnoscSilnika { get; set; }
+    public int IloscOsob { get; set; }
+
+    public SamochodOsobowy() : base()
+    {
+        Console.Write("Waga (2-4,5 t): "); double.TryParse(Console.ReadLine(), out double waga); Waga = waga;
+        Console.Write("Pojemność silnika (0,8-3,0): "); double.TryParse(Console.ReadLine(), out double pojemnosc); PojemnoscSilnika = pojemnosc;
+        Console.Write("Ilość osób: "); int.TryParse(Console.ReadLine(), out int iloscOsob); IloscOsob = iloscOsob;
+    }
+
+    public override void WyswietlInformacje()
+    {
+        base.WyswietlInformacje();
+        Console.WriteLine($"Waga: {Waga} t, Pojemność silnika: {PojemnoscSilnika} L, Ilość osób: {IloscOsob}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        SamochodOsobowy osobowySamochod = new SamochodOsobowy();
+        Samochod samochod1 = new Samochod();
+        Samochod samochod2 = new Samochod("Ford", "Focus", "Sedan", "Czerwony", 2020, 15000);
+
+        Console.WriteLine("Informacje o samochodach:");
+        osobowySamochod.WyswietlInformacje();
+        samochod1.WyswietlInformacje();
+        samochod2.WyswietlInformacje();
+    }
+}
