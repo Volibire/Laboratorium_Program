@@ -1,0 +1,38 @@
+using System;
+using System.Linq;
+using System.Numerics;
+
+class Liczba
+{
+    private int[] cyfry;
+
+    public Liczba(string liczbaStr)
+    {
+        cyfry = liczbaStr.Select(c => int.Parse(c.ToString())).ToArray();
+    }
+
+    public void WypiszLiczbe() => Console.WriteLine($"Liczba: {string.Join("", cyfry)}");
+
+    public void UstawLiczbe(string liczbaStr) => cyfry = liczbaStr.Select(c => int.Parse(c.ToString())).ToArray();
+
+    public void PomnozPrzez(int mnoznik) => cyfry = (ToBigInteger() * mnoznik).ToString().Select(c => int.Parse(c.ToString())).ToArray();
+
+    public BigInteger Silnia() => ToBigInteger() < 0 ? throw new ArgumentException("Silnia jest zdefiniowana tylko dla nieujemnych liczb całkowitych.") : Enumerable.Range(1, ToBigInteger().IsZero ? 1 : (int)ToBigInteger()).Aggregate(BigInteger.One, (acc, val) => acc * val);
+
+    private BigInteger ToBigInteger() => BigInteger.Parse(string.Join("", cyfry));
+}
+
+class Program
+{
+    static void Main()
+    {
+        Liczba mojaLiczba = new Liczba("123");
+        mojaLiczba.WypiszLiczbe();
+
+        mojaLiczba.PomnozPrzez(3);
+        Console.WriteLine("Po pomnożeniu przez 3:");
+        mojaLiczba.WypiszLiczbe();
+
+        Console.WriteLine("Silnia liczby: " + mojaLiczba.Silnia());
+    }
+}
